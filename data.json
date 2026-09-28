@@ -1,0 +1,12 @@
+[
+	{
+		"id": 1,
+		"name": "Kalash",
+		"course": "Flask"
+	},
+	{
+		"id": 2,
+		"name": "Shayrya",
+		"course": "MongoDB"
+	}
+]
