@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from pymongo import MongoClient
 import os
 
@@ -8,11 +8,14 @@ app = Flask(__name__)
 client = MongoClient(os.getenv("MONGO_URL"))
 
 db = client["todo_database"]
-collection = db["todos"]
+todos = db["todos"]
 
 
-#Task1 : JSON api route 
-@app.route("/submittodoitem", method=["POST"])
+@app.route("/")
+def home():
+    return render_template("todo.html")
+
+@app.route("/submittodoitem", methods=["POST"])
 def submit_todo_item():
     data = request.get_json()
 
@@ -36,31 +39,7 @@ def submit_todo_item():
     }),201
 
 
-@app.route("/", methods=["POST", "GET"])
-def index():
-    if request.method == "POST":
-        try:
-            name = request.form['name']
-            email = request.form['email']
-            course = request.form['course']
-            data = {
-                "name": name,
-                "email": email,
-                "course": course
-            }
-            collection.insert_one(data)
-
-            return redirect(url_for("success"))
-        except Exception as e:
-            return render_template('index.html', error=str(e))
-
-    return render_template('index.html')
-
-
-#success page
-@app.route("/success")
-def success():
-    return render_template('success.html')
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
+
+
