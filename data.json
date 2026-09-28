@@ -2,11 +2,13 @@
 	{
 		"id": 1,
 		"name": "Kalash",
-		"course": "Flask"
+		"course": "Flask",
+		"project": "Git and Gihub"
 	},
 	{
 		"id": 2,
 		"name": "Shayrya",
-		"course": "MongoDB"
+		"course": "MongoDB",
+		"project": "Git and Gihub"	
 	}
 ]
