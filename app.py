@@ -1,29 +1,39 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, request
 from pymongo import MongoClient
-from dotenv import load_dotenv
-import json
 import os
 
-load_dotenv()
 
 app = Flask(__name__)
 
-#Mongo Atlasconnection
-MONGO_URL = os.getenv("MONGO_URL")
+client = MongoClient(os.getenv("MONGO_URL"))
 
-
-client = MongoClient(MONGO_URL)
-db = client["flask_mongodb_db"]
-collection = db["users"]
+db = client["todo_database"]
+collection = db["todos"]
 
 
 #Task1 : JSON api route 
-@app.route("/api")
-def api():
-    with open("data.json",'r') as file:
-        data = json.load(file)
+@app.route("/submittodoitem", method=["POST"])
+def submit_todo_item():
+    data = request.get_json()
 
-    return jsonify(data)
+    item_name = data.get('itemName')
+    item_description = data.get('itemDescription')
+
+    if not item_name or not item_description:
+        return jsonify({
+            "error" : "itemName and itemDescription are required"
+        }),400
+
+    todo = {
+        "itemName" : item_name,
+        'itemDescription' : item_description
+    }
+    result = todos.insert_one(todo)
+
+    return jsonify({
+        "message" : "Todo item saved successfully",
+        "id" : str(result.inserted_id)
+    }),201
 
 
 @app.route("/", methods=["POST", "GET"])
